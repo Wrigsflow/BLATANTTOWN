@@ -5,7 +5,7 @@
 
 local ScreenGui = Instance.new("ScreenGui")
 local Frame = Instance.new("Frame")
-local TextLabel = Instance.new("TextLabel")
+local BLATANTTOWN = Instance.new("TextLabel")
 local AIMLOCK = Instance.new("TextButton")
 local Fakemacro = Instance.new("TextButton")
 local FLY = Instance.new("TextButton")
@@ -14,37 +14,34 @@ local Credits = Instance.new("TextLabel")
 local Linloyal = Instance.new("TextLabel")
 local Xinloyalx = Instance.new("TextLabel")
 local loyalxcredits = Instance.new("TextLabel")
-local dahood = Instance.new("TextLabel")
 
 --Properties:
 
 ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-ScreenGui.ResetOnSpawn = false
 
 Frame.Parent = ScreenGui
 Frame.BackgroundColor3 = Color3.fromRGB(49, 49, 49)
 Frame.BorderSizePixel = 0
 Frame.Position = UDim2.new(0.414563805, 0, 0.0561097264, 0)
-Frame.Size = UDim2.new(0, 236, 0, 712)
-Frame.Active = true
-Frame.Draggable = true
+Frame.Size = UDim2.new(0, 236, 0, 366)
 
-TextLabel.Parent = Frame
-TextLabel.BackgroundColor3 = Color3.fromRGB(93, 93, 93)
-TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextLabel.BorderSizePixel = 0
-TextLabel.Size = UDim2.new(0, 236, 0, 50)
-TextLabel.Font = Enum.Font.Unknown
-TextLabel.Text = "Blatant Town"
-TextLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
-TextLabel.TextSize = 20.000
+BLATANTTOWN.Name = "BLATANT TOWN"
+BLATANTTOWN.Parent = Frame
+BLATANTTOWN.BackgroundColor3 = Color3.fromRGB(93, 93, 93)
+BLATANTTOWN.BorderColor3 = Color3.fromRGB(0, 0, 0)
+BLATANTTOWN.BorderSizePixel = 0
+BLATANTTOWN.Size = UDim2.new(0, 236, 0, 50)
+BLATANTTOWN.Font = Enum.Font.Unknown
+BLATANTTOWN.Text = "Blatant Town"
+BLATANTTOWN.TextColor3 = Color3.fromRGB(0, 0, 0)
+BLATANTTOWN.TextSize = 26.000
 
 AIMLOCK.Name = "AIMLOCK"
 AIMLOCK.Parent = Frame
 AIMLOCK.BackgroundColor3 = Color3.fromRGB(94, 94, 94)
 AIMLOCK.BorderColor3 = Color3.fromRGB(0, 0, 0)
-AIMLOCK.Position = UDim2.new(0.0762711838, 0, 0.215646118, 0)
+AIMLOCK.Position = UDim2.new(0.0762711838, 0, 0.234771788, 0)
 AIMLOCK.Size = UDim2.new(0, 200, 0, 50)
 AIMLOCK.Font = Enum.Font.SourceSans
 AIMLOCK.Text = "Silent aim (t) OP"
@@ -177,7 +174,7 @@ Fakemacro.Name = "Fake macro"
 Fakemacro.Parent = Frame
 Fakemacro.BackgroundColor3 = Color3.fromRGB(94, 94, 94)
 Fakemacro.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Fakemacro.Position = UDim2.new(0.0762711838, 0, 0.36550194, 0)
+Fakemacro.Position = UDim2.new(0.0762711838, 0, 0.370966405, 0)
 Fakemacro.Size = UDim2.new(0, 200, 0, 50)
 Fakemacro.Font = Enum.Font.SourceSans
 Fakemacro.Text = "Fake macro (q)"
@@ -185,34 +182,35 @@ Fakemacro.TextColor3 = Color3.fromRGB(0, 0, 0)
 Fakemacro.TextSize = 24.000
 Fakemacro.MouseButton1Down:connect(function()
 	-- the key 2 speed is "Q"
-plr = game:GetService('Players').LocalPlayer
-down = true
- 
-function onButton1Down(mouse)
-    down = true
-    while down do
-        if not down then break end
-        local char = plr.Character
-        char.HumanoidRootPart.Velocity = char.HumanoidRootPart.CFrame.lookVector * 200
-        wait()
-    end
-end
- 
-function onButton1Up(mouse)
-    down = false
-end
- 
-function onSelected(mouse)
-    mouse.KeyDown:connect(function(q) if q:lower()=="q"then onButton1Down(mouse)end end)
-    mouse.KeyUp:connect(function(q) if q:lower()=="q"then onButton1Up(mouse)end end)
-end
-onSelected(game.Players.LocalPlayer:GetMouse())
-game.StarterGui:SetCore("SendNotification",{
-			Title = "Blatant town";
-			Text = "Fake macro on (Made by Wrig)";
-			Duration = 3.0;
-		})
+	plr = game:GetService('Players').LocalPlayer
+	down = true
+
+	function onButton1Down(mouse)
+		down = true
+		while down do
+			if not down then break end
+			local char = plr.Character
+			char.HumanoidRootPart.Velocity = char.HumanoidRootPart.CFrame.lookVector * 200
+			wait()
+		end
+	end
+
+	function onButton1Up(mouse)
+		down = false
+	end
+
+	function onSelected(mouse)
+		mouse.KeyDown:connect(function(q) if q:lower()=="q"then onButton1Down(mouse)end end)
+		mouse.KeyUp:connect(function(q) if q:lower()=="q"then onButton1Up(mouse)end end)
+	end
+	onSelected(game.Players.LocalPlayer:GetMouse())
+	game.StarterGui:SetCore("SendNotification",{
+		Title = "Blatant town";
+		Text = "Fake macro on (Made by Wrig)";
+		Duration = 3.0;
+	})
 end)
+
 
 FLY.Name = "FLY"
 FLY.Parent = Frame
@@ -345,7 +343,7 @@ Esp.Name = "Esp"
 Esp.Parent = Frame
 Esp.BackgroundColor3 = Color3.fromRGB(94, 94, 94)
 Esp.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Esp.Position = UDim2.new(0.0762711838, 0, 0.651928246, 0)
+Esp.Position = UDim2.new(0.0762711838, 0, 0.640999258, 0)
 Esp.Size = UDim2.new(0, 200, 0, 50)
 Esp.Font = Enum.Font.SourceSans
 Esp.Text = "Esp"
@@ -392,14 +390,15 @@ Esp.MouseButton1Down:connect(function()
 	end)
 end)
 
+
 Credits.Name = "Credits"
 Credits.Parent = Frame
 Credits.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 Credits.BackgroundTransparency = 1.000
-Credits.Position = UDim2.new(0.177966088, 0, 0.973314583, 0)
+Credits.Position = UDim2.new(0.177966088, 0, 0.902276337, 0)
 Credits.Size = UDim2.new(0, 153, 0, 19)
 Credits.Font = Enum.Font.SourceSans
-Credits.Text = "Made by WRG"
+Credits.Text = "Made by WRIG"
 Credits.TextColor3 = Color3.fromRGB(0, 0, 0)
 Credits.TextSize = 14.000
 
@@ -418,7 +417,7 @@ Xinloyalx.Name = "X in loyal x"
 Xinloyalx.Parent = Frame
 Xinloyalx.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 Xinloyalx.BackgroundTransparency = 1.000
-Xinloyalx.Position = UDim2.new(0.0296610184, 0, 0.00842696615, 0)
+Xinloyalx.Position = UDim2.new(0.0254237298, 0, -0.0025019953, 0)
 Xinloyalx.Size = UDim2.new(0, 26, 0, 26)
 Xinloyalx.Font = Enum.Font.SourceSans
 Xinloyalx.Text = "X"
@@ -432,6 +431,6 @@ loyalxcredits.BackgroundTransparency = 1.000
 loyalxcredits.Position = UDim2.new(0.296610177, 0, 0.95505619, 0)
 loyalxcredits.Size = UDim2.new(0, 96, 0, 13)
 loyalxcredits.Font = Enum.Font.SourceSans
-loyalxcredits.Text = "LOYAL X  Ⓒ 2023"
+loyalxcredits.Text = "Loyal X"
 loyalxcredits.TextColor3 = Color3.fromRGB(0, 0, 0)
 loyalxcredits.TextSize = 20.000
