@@ -1,8 +1,3 @@
--- Gui to Lua
--- Version: 3.2
-
--- Instances:
-
 local ScreenGui = Instance.new("ScreenGui")
 local Frame = Instance.new("Frame")
 local BLATANTTOWN = Instance.new("TextLabel")
@@ -19,12 +14,15 @@ local loyalxcredits = Instance.new("TextLabel")
 
 ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+ScreenGui.ResetOnSpawn = false
 
 Frame.Parent = ScreenGui
 Frame.BackgroundColor3 = Color3.fromRGB(49, 49, 49)
 Frame.BorderSizePixel = 0
 Frame.Position = UDim2.new(0.414563805, 0, 0.0561097264, 0)
 Frame.Size = UDim2.new(0, 236, 0, 366)
+Frame.Active = true
+Frame.Draggable = true
 
 BLATANTTOWN.Name = "BLATANT TOWN"
 BLATANTTOWN.Parent = Frame
