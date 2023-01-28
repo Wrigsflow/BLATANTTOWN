@@ -435,14 +435,3 @@ loyalxcredits.Font = Enum.Font.SourceSans
 loyalxcredits.Text = "LOYAL X  Ⓒ 2023"
 loyalxcredits.TextColor3 = Color3.fromRGB(0, 0, 0)
 loyalxcredits.TextSize = 20.000
-
-dahood.Name = "da hood"
-dahood.Parent = Frame
-dahood.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-dahood.BackgroundTransparency = 1.000
-dahood.Position = UDim2.new(0.0762711912, 0, 0.101123594, 0)
-dahood.Size = UDim2.new(0, 200, 0, 50)
-dahood.Font = Enum.Font.SourceSans
-dahood.Text = "DA HOOD"
-dahood.TextColor3 = Color3.fromRGB(0, 0, 0)
-dahood.TextSize = 19.000
