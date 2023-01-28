@@ -1,0 +1,448 @@
+-- Gui to Lua
+-- Version: 3.2
+
+-- Instances:
+
+local ScreenGui = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local TextLabel = Instance.new("TextLabel")
+local AIMLOCK = Instance.new("TextButton")
+local Fakemacro = Instance.new("TextButton")
+local FLY = Instance.new("TextButton")
+local Esp = Instance.new("TextButton")
+local Credits = Instance.new("TextLabel")
+local Linloyal = Instance.new("TextLabel")
+local Xinloyalx = Instance.new("TextLabel")
+local loyalxcredits = Instance.new("TextLabel")
+local dahood = Instance.new("TextLabel")
+
+--Properties:
+
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+ScreenGui.ResetOnSpawn = false
+
+Frame.Parent = ScreenGui
+Frame.BackgroundColor3 = Color3.fromRGB(49, 49, 49)
+Frame.BorderSizePixel = 0
+Frame.Position = UDim2.new(0.414563805, 0, 0.0561097264, 0)
+Frame.Size = UDim2.new(0, 236, 0, 712)
+Frame.Active = true
+Frame.Draggable = true
+
+TextLabel.Parent = Frame
+TextLabel.BackgroundColor3 = Color3.fromRGB(93, 93, 93)
+TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel.BorderSizePixel = 0
+TextLabel.Size = UDim2.new(0, 236, 0, 50)
+TextLabel.Font = Enum.Font.Unknown
+TextLabel.Text = "Blatant Town"
+TextLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel.TextSize = 20.000
+
+AIMLOCK.Name = "AIMLOCK"
+AIMLOCK.Parent = Frame
+AIMLOCK.BackgroundColor3 = Color3.fromRGB(94, 94, 94)
+AIMLOCK.BorderColor3 = Color3.fromRGB(0, 0, 0)
+AIMLOCK.Position = UDim2.new(0.0762711838, 0, 0.215646118, 0)
+AIMLOCK.Size = UDim2.new(0, 200, 0, 50)
+AIMLOCK.Font = Enum.Font.SourceSans
+AIMLOCK.Text = "Silent aim (t) OP"
+AIMLOCK.TextColor3 = Color3.fromRGB(0, 0, 0)
+AIMLOCK.TextSize = 24.000
+AIMLOCK.MouseButton1Down:connect(function()
+	game.StarterGui:SetCore("SendNotification",{
+		Title = "Blatant town";
+		Text = "Lock is starting. (Made by Wrig)";
+		Duration = 3.0;
+	})
+	local Settings = {
+		AimLock = {
+			Enabled = true,
+			Aimlockkey = "t",
+			Prediction = 0.135,
+			Aimpart = 'HumanoidRootPart',
+			Notifications = false
+		},
+		Settings = {
+			Thickness = 3.5,
+			Transparency = 1,
+			Color = Color3.fromRGB(255, 255, 255),
+			FOV = false
+		}
+
+	}
+
+	local CurrentCamera = game:GetService("Workspace").CurrentCamera
+	local Inset = game:GetService("GuiService"):GetGuiInset().Y
+	local RunService = game:GetService("RunService")
+
+	local Mouse = game.Players.LocalPlayer:GetMouse()
+	local LocalPlayer = game.Players.LocalPlayer
+
+	local Line = Drawing.new("Line")
+	local Circle = Drawing.new("Circle")
+
+	local Plr
+
+	Mouse.KeyDown:Connect(function(KeyPressed)
+		if KeyPressed == (Settings.AimLock.Aimlockkey) then
+			if Settings.AimLock.Enabled == true then
+				Settings.AimLock.Enabled = false
+				if Settings.AimLock.Notifications == true then
+					Plr = FindClosestPlayer()
+					game.StarterGui:SetCore("SendNotification", {
+						Title = "Private",
+						Text = "Unlocked"
+					})
+				end
+			else
+				Plr = FindClosestPlayer()
+				Settings.AimLock.Enabled = true
+				if Settings.AimLock.Notifications == true then
+					game.StarterGui:SetCore("SendNotification", {
+						Title = "Private",
+						Text = "Locked On :  " .. tostring(Plr.Character.Humanoid.DisplayName)
+					})
+				end
+			end
+		end
+	end)
+
+	function FindClosestPlayer()
+		local ClosestDistance, ClosestPlayer = math.huge, nil;
+		for _, Player in next, game:GetService("Players"):GetPlayers() do
+			local ISNTKNOCKED = Player.Character:WaitForChild("BodyEffects")["K.O"].Value ~= true
+			local ISNTGRABBED = Player.Character:FindFirstChild("GRABBING_COINSTRAINT") == nil
+
+			if Player ~= LocalPlayer then
+				local Character = Player.Character
+				if Character and Character.Humanoid.Health > 1 and ISNTKNOCKED and ISNTGRABBED then
+					local Position, IsVisibleOnViewPort = CurrentCamera:WorldToViewportPoint(Character.HumanoidRootPart
+						.Position)
+					if IsVisibleOnViewPort then
+						local Distance = (Vector2.new(Mouse.X, Mouse.Y) - Vector2.new(Position.X, Position.Y)).Magnitude
+						if Distance < ClosestDistance then
+							ClosestPlayer = Player
+							ClosestDistance = Distance
+						end
+					end
+				end
+			end
+		end
+		return ClosestPlayer, ClosestDistance
+	end
+
+	RunService.Heartbeat:connect(function()
+		if Settings.AimLock.Enabled == true then
+			local Vector = CurrentCamera:WorldToViewportPoint(Plr.Character[Settings.AimLock.Aimpart].Position +
+				(Plr.Character[Settings.AimLock.Aimpart].Velocity *
+					Settings.AimLock.Prediction))
+			Line.Color = Settings.Settings.Color
+			Line.Transparency = Settings.Settings .Transparency
+			Line.Thickness = Settings.Settings .Thickness
+			Line.From = Vector2.new(Mouse.X, Mouse.Y + Inset)
+			Line.To = Vector2.new(Vector.X, Vector.Y)
+			Line.Visible = true
+			Circle.Position = Vector2.new(Mouse.X, Mouse.Y + Inset)
+			Circle.Visible = Settings.Settings.FOV
+			Circle.Thickness = 1.5
+			Circle.Thickness = 2
+			Circle.Radius = 60
+			Circle.Color = Settings.Settings.Color
+		elseif Settings.AimLock.FOV == true then
+			Circle.Visible = true
+		else
+			Circle.Visible = false
+			Line.Visible = false
+		end
+	end)
+
+	local mt = getrawmetatable(game)
+	local old = mt.__namecall
+	setreadonly(mt, false)
+	mt.__namecall = newcclosure(function(...)
+		local args = {...}
+		if Settings.AimLock.Enabled and getnamecallmethod() == "FireServer" and args[2] == "UpdateMousePos" then
+			args[3] = Plr.Character[Settings.AimLock.Aimpart].Position +
+				(Plr.Character[Settings.AimLock.Aimpart].Velocity * Settings.AimLock.Prediction)
+
+			return old(unpack(args))
+		end
+		return old(...)
+	end)
+end)
+
+Fakemacro.Name = "Fake macro"
+Fakemacro.Parent = Frame
+Fakemacro.BackgroundColor3 = Color3.fromRGB(94, 94, 94)
+Fakemacro.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Fakemacro.Position = UDim2.new(0.0762711838, 0, 0.36550194, 0)
+Fakemacro.Size = UDim2.new(0, 200, 0, 50)
+Fakemacro.Font = Enum.Font.SourceSans
+Fakemacro.Text = "Fake macro (q)"
+Fakemacro.TextColor3 = Color3.fromRGB(0, 0, 0)
+Fakemacro.TextSize = 24.000
+Fakemacro.MouseButton1Down:connect(function()
+	-- the key 2 speed is "Q"
+plr = game:GetService('Players').LocalPlayer
+down = true
+ 
+function onButton1Down(mouse)
+    down = true
+    while down do
+        if not down then break end
+        local char = plr.Character
+        char.HumanoidRootPart.Velocity = char.HumanoidRootPart.CFrame.lookVector * 200
+        wait()
+    end
+end
+ 
+function onButton1Up(mouse)
+    down = false
+end
+ 
+function onSelected(mouse)
+    mouse.KeyDown:connect(function(q) if q:lower()=="q"then onButton1Down(mouse)end end)
+    mouse.KeyUp:connect(function(q) if q:lower()=="q"then onButton1Up(mouse)end end)
+end
+onSelected(game.Players.LocalPlayer:GetMouse())
+game.StarterGui:SetCore("SendNotification",{
+			Title = "Blatant town";
+			Text = "Fake macro on (Made by Wrig)";
+			Duration = 3.0;
+		})
+end)
+
+FLY.Name = "FLY"
+FLY.Parent = Frame
+FLY.BackgroundColor3 = Color3.fromRGB(94, 94, 94)
+FLY.BorderColor3 = Color3.fromRGB(0, 0, 0)
+FLY.Position = UDim2.new(0.0762711838, 0, 0.505842984, 0)
+FLY.Size = UDim2.new(0, 200, 0, 50)
+FLY.Font = Enum.Font.SourceSans
+FLY.Text = "Fly (X)"
+FLY.TextColor3 = Color3.fromRGB(0, 0, 0)
+FLY.TextSize = 24.000
+FLY.MouseButton1Down:connect(function()
+	plr = game.Players.LocalPlayer
+	local mouse = plr:GetMouse()
+	game.StarterGui:SetCore("SendNotification",{
+		Title = "Blatant town";
+		Text = "Fly is starting. (Made by Wrig)";
+		Duration = 3.0;
+	})
+
+	localplayer = plr
+
+	if workspace:FindFirstChild("Core") then
+		workspace.Core:Destroy()
+	end
+
+	local Core = Instance.new("Part")
+	Core.Name = "Core"
+	Core.Size = Vector3.new(0.05, 0.05, 0.05)
+
+	spawn(function()
+		Core.Parent = workspace
+		local Weld = Instance.new("Weld", Core)
+		Weld.Part0 = Core
+		Weld.Part1 = localplayer.Character.LowerTorso
+		Weld.C0 = CFrame.new(0, 0, 0)
+	end)
+
+	workspace:WaitForChild("Core")
+
+	local torso = workspace.Core
+	flying = true
+	local speed=10
+	local keys={a=false,d=false,w=false,s=false} 
+	local e1
+	local e2
+	local function start()
+		local pos = Instance.new("BodyPosition",torso)
+		local gyro = Instance.new("BodyGyro",torso)
+		pos.Name="EPIXPOS"
+		pos.maxForce = Vector3.new(math.huge, math.huge, math.huge)
+		pos.position = torso.Position
+		gyro.maxTorque = Vector3.new(9e9, 9e9, 9e9) 
+		gyro.cframe = torso.CFrame
+		repeat
+			wait()
+			localplayer.Character.Humanoid.PlatformStand=true
+			local new=gyro.cframe - gyro.cframe.p + pos.position
+			if not keys.w and not keys.s and not keys.a and not keys.d then
+				speed=5
+			end
+			if keys.w then 
+				new = new + workspace.CurrentCamera.CoordinateFrame.lookVector * speed
+				speed=speed+0
+			end
+			if keys.s then 
+				new = new - workspace.CurrentCamera.CoordinateFrame.lookVector * speed
+				speed=speed+0
+			end
+			if keys.d then 
+				new = new * CFrame.new(speed,0,0)
+				speed=speed+0
+			end
+			if keys.a then 
+				new = new * CFrame.new(-speed,0,0)
+				speed=speed+0
+			end
+			if speed>30 then
+				speed=20
+			end
+			pos.position=new.p
+			if keys.w then
+				gyro.cframe = workspace.CurrentCamera.CoordinateFrame*CFrame.Angles(-math.rad(speed*0),0,0)
+			elseif keys.s then
+				gyro.cframe = workspace.CurrentCamera.CoordinateFrame*CFrame.Angles(math.rad(speed*0),0,0)
+			else
+				gyro.cframe = workspace.CurrentCamera.CoordinateFrame
+			end
+		until flying == false
+		if gyro then gyro:Destroy() end
+		if pos then pos:Destroy() end
+		flying=false
+		localplayer.Character.Humanoid.PlatformStand=false
+		speed=10
+	end
+	e1=mouse.KeyDown:connect(function(key)
+		if not torso or not torso.Parent then flying=false e1:disconnect() e2:disconnect() return end
+		if key=="w" then
+			keys.w=true
+		elseif key=="s" then
+			keys.s=true
+		elseif key=="a" then
+			keys.a=true
+		elseif key=="d" then
+			keys.d=true
+		elseif key=="x" then
+			if flying==true then
+				flying=false
+			else
+				flying=true
+				start()
+			end
+		end
+	end)
+	e2=mouse.KeyUp:connect(function(key)
+		if key=="w" then
+			keys.w=false
+		elseif key=="s" then
+			keys.s=false
+		elseif key=="a" then
+			keys.a=false
+		elseif key=="d" then
+			keys.d=false
+		end
+	end)
+	start()
+end)
+
+Esp.Name = "Esp"
+Esp.Parent = Frame
+Esp.BackgroundColor3 = Color3.fromRGB(94, 94, 94)
+Esp.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Esp.Position = UDim2.new(0.0762711838, 0, 0.651928246, 0)
+Esp.Size = UDim2.new(0, 200, 0, 50)
+Esp.Font = Enum.Font.SourceSans
+Esp.Text = "Esp"
+Esp.TextColor3 = Color3.fromRGB(0, 0, 0)
+Esp.TextSize = 24.000
+Esp.MouseButton1Down:connect(function()
+	game.StarterGui:SetCore("SendNotification",{
+		Title = "Blatant town";
+		Text = "ESP on (Made by Wrig)";
+		Duration = 5.0;
+	})
+	local esp_settings = { 
+		textsize = 8,
+		colour = 85,170,0
+	}
+
+	local gui = Instance.new("BillboardGui")
+	local esp = Instance.new("TextLabel",gui)
+
+
+
+	gui.Name = "Cracked esp";
+	gui.ResetOnSpawn = false
+	gui.AlwaysOnTop = true;
+	gui.LightInfluence = 0;
+	gui.Size = UDim2.new(1.75, 0, 1.75, 0);
+	esp.BackgroundColor3 = Color3.fromRGB(85, 170, 0);
+	esp.Text = ""
+	esp.Size = UDim2.new(0.0009, 0.00009, 0.0009, 0.00009);
+	esp.BorderSizePixel = 4;
+	esp.BorderColor3 = Color3.new(esp_settings.colour)
+	esp.BorderSizePixel = 0
+	esp.Font = "GothamSemibold"
+	esp.TextSize = 14
+	esp.TextColor3 = Color3.fromRGB(255, 255, 255) -- text colour
+
+	game:GetService("RunService").RenderStepped:Connect(function()
+		for i,v in pairs (game:GetService("Players"):GetPlayers()) do
+			if v ~= game:GetService("Players").LocalPlayer and v.Character.Head:FindFirstChild("Cracked esp")==nil  then
+				esp.Text = "{"..v.Name.."}"
+				gui:Clone().Parent = v.Character.Head
+			end
+		end
+	end)
+end)
+
+Credits.Name = "Credits"
+Credits.Parent = Frame
+Credits.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Credits.BackgroundTransparency = 1.000
+Credits.Position = UDim2.new(0.177966088, 0, 0.973314583, 0)
+Credits.Size = UDim2.new(0, 153, 0, 19)
+Credits.Font = Enum.Font.SourceSans
+Credits.Text = "Made by WRG"
+Credits.TextColor3 = Color3.fromRGB(0, 0, 0)
+Credits.TextSize = 14.000
+
+Linloyal.Name = "L in loyal"
+Linloyal.Parent = Frame
+Linloyal.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Linloyal.BackgroundTransparency = 1.000
+Linloyal.Position = UDim2.new(0, 0, 0.0168539323, 0)
+Linloyal.Size = UDim2.new(0, 26, 0, 26)
+Linloyal.Font = Enum.Font.SourceSans
+Linloyal.Text = "L"
+Linloyal.TextColor3 = Color3.fromRGB(255, 255, 255)
+Linloyal.TextSize = 20.000
+
+Xinloyalx.Name = "X in loyal x"
+Xinloyalx.Parent = Frame
+Xinloyalx.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Xinloyalx.BackgroundTransparency = 1.000
+Xinloyalx.Position = UDim2.new(0.0296610184, 0, 0.00842696615, 0)
+Xinloyalx.Size = UDim2.new(0, 26, 0, 26)
+Xinloyalx.Font = Enum.Font.SourceSans
+Xinloyalx.Text = "X"
+Xinloyalx.TextColor3 = Color3.fromRGB(255, 140, 0)
+Xinloyalx.TextSize = 16.000
+
+loyalxcredits.Name = "loyal x credits"
+loyalxcredits.Parent = Frame
+loyalxcredits.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+loyalxcredits.BackgroundTransparency = 1.000
+loyalxcredits.Position = UDim2.new(0.296610177, 0, 0.95505619, 0)
+loyalxcredits.Size = UDim2.new(0, 96, 0, 13)
+loyalxcredits.Font = Enum.Font.SourceSans
+loyalxcredits.Text = "LOYAL X  Ⓒ 2023"
+loyalxcredits.TextColor3 = Color3.fromRGB(0, 0, 0)
+loyalxcredits.TextSize = 20.000
+
+dahood.Name = "da hood"
+dahood.Parent = Frame
+dahood.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+dahood.BackgroundTransparency = 1.000
+dahood.Position = UDim2.new(0.0762711912, 0, 0.101123594, 0)
+dahood.Size = UDim2.new(0, 200, 0, 50)
+dahood.Font = Enum.Font.SourceSans
+dahood.Text = "DA HOOD"
+dahood.TextColor3 = Color3.fromRGB(0, 0, 0)
+dahood.TextSize = 19.000
