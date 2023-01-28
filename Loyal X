@@ -33,7 +33,7 @@ BLATANTTOWN.Size = UDim2.new(0, 236, 0, 50)
 BLATANTTOWN.Font = Enum.Font.Unknown
 BLATANTTOWN.Text = "Blatant Town"
 BLATANTTOWN.TextColor3 = Color3.fromRGB(0, 0, 0)
-BLATANTTOWN.TextSize = 26.000
+BLATANTTOWN.TextSize = 20.000
 
 AIMLOCK.Name = "AIMLOCK"
 AIMLOCK.Parent = Frame
